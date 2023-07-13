@@ -1,0 +1,23 @@
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "info, health, prometheus"
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+spring:
+  main:
+    banner-mode: off
+
+app:
+  kafka:
+    bootstrap-servers: "localhost:9092"
+    application-id: "otel-extractor-stream-processor-prime"
+    consumer-group-id: "otel-extractor-stream-processor"
+    security:
+      enabled: false
+  stream:
+    total-off-heap-size: 300MB
+    total-mem-table: 100MB

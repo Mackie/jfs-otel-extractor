@@ -1,0 +1,68 @@
+replicaCount: 1
+
+image:
+  repository: ""
+  pullPolicy: Always
+  tag: "latest"
+
+imagePullSecrets: []
+nameOverride: "otel-extractor-stream-processor"
+fullnameOverride: ""
+
+serviceAccount:
+  create: false
+
+podAnnotations: {}
+
+containerEnv:
+  - name: APP_KAFKA_SECURITY_ENABLED
+    value: "true"
+  - name: APP_KAFKA_PARTITIONS
+    value: "3"
+  - name: APP_KAFKA_SECURITY_USERNAME
+    valueFrom:
+      secretKeyRef:
+        name: kafka-user
+        key: username
+  - name: APP_KAFKA_SECURITY_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: kafka-user
+        key: password
+  - name: APP_KAFKA_BOOTSTRAPSERVERS
+    valueFrom:
+      configMapKeyRef:
+        name: kafka-params
+        key: bootstrap-servers
+
+podSecurityContext: {}
+
+securityContext: {}
+
+service:
+  type: ClusterIP
+  port: 8080
+
+ingress:
+  enabled: false
+
+resources:
+  limits:
+    cpu: 500m
+    memory: 700Mi
+  requests:
+    cpu: 300m
+    memory: 500Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
